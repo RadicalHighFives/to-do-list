@@ -1,6 +1,7 @@
-# Getting Started with To do list React App
+# Getting Started with To-do List React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<img width="475" alt="Screenshot 2024-01-22 at 10 33 32 PM" src="https://github.com/RadicalHighFives/to-do-list/assets/4473947/eab0fb86-1c52-4eb0-88e0-bf8af4cdc3fc">
+
 
 ### `npm start`
 
