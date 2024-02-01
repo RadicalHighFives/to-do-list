@@ -2,23 +2,31 @@ import "./App.css";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { Component, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 uuidv4();
 
 export default function App() {
   const [todos, setTodos] = useState([]);
+  const [track, setTrack] = useState(false);
 
   const handleAddTodo = (todo) => {
-    setTodos([
-      ...todos,
-      { id: uuidv4(), task: todo, completed: false, isEditing: false },
-    ]);
-    console.log(todos);
+    if (String(todo) === "") {
+      alert("Enter a task.");
+    }
+
+    if (String(todo) !== "") {
+      setTodos([
+        ...todos,
+        { id: uuidv4(), task: todo, completed: false, isEditing: false },
+      ]);
+    }
+    setTrack(true);
   };
 
   const handleDeleteTodo = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id));
+    setTrack(false);
   };
 
   const handleEditTodo = (id) => {
@@ -47,9 +55,11 @@ export default function App() {
 
   return (
     <div className="Container">
-      <h1>To Do List of 2024</h1>
+      <h1>Today's Goals </h1>
       <TodoForm handleAddTodo={handleAddTodo} />
 
+      <TodaysDate />
+      {track === true ? <Clock /> : ""}
       {todos.map((todo, index) =>
         todo.isEditing ? (
           <EditTodoForm handleEditTask={handleEditTask} task={todo} />
@@ -66,9 +76,51 @@ export default function App() {
     </div>
   );
 }
+
 // ========================================
 // Components
 // =======================================
+
+function TodoForm({ handleAddTodo }) {
+  const [value, setValue] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleAddTodo(value);
+    setValue("");
+  };
+
+  return (
+    <form className="TodoForm" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        className="todo-input"
+        value={value}
+        placeholder="type in a task"
+        onChange={(e) => setValue(e.target.value)}
+      ></input>
+      <button type="submit" className="todo-btn">
+        Add Task
+      </button>
+    </form>
+  );
+}
+
+function TodaysDate() {
+  const date = new Date();
+  var dd = String(date.getDate()).padStart(2, "0");
+  var mm = String(date.getMonth() + 1).padStart(2, "0");
+  var yyyy = date.getFullYear();
+
+  return (
+    <div>
+      <h1>
+        {mm}/{dd}/{yyyy}
+      </h1>
+    </div>
+  );
+}
+
 function Todo({ task, toggleComplete, handleDeleteTodo, handleEditTodo }) {
   return (
     <div className="Todo">
@@ -92,37 +144,11 @@ function Todo({ task, toggleComplete, handleDeleteTodo, handleEditTodo }) {
   );
 }
 
-function TodoForm({ handleAddTodo }) {
-  const [value, setValue] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleAddTodo(value);
-    setValue("");
-  };
-
-  return (
-    <form className="TodoForm" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        className="todo-input"
-        value={value}
-        placeholder="type in task today"
-        onChange={(e) => setValue(e.target.value)}
-      ></input>
-      <button type="submit" className="todo-btn">
-        Add Task
-      </button>
-    </form>
-  );
-}
-
 function EditTodoForm({ handleEditTask, task }) {
   const [value, setValue] = useState(task.task);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(value);
     handleEditTask(value, task.id);
     setValue("");
   };
@@ -140,4 +166,36 @@ function EditTodoForm({ handleEditTask, task }) {
       </button>
     </form>
   );
+}
+
+class Clock extends Component {
+  constructor() {
+    super();
+    this.state = { time: new Date() }; // initialise the state
+  }
+
+  componentDidMount() {
+    // create the interval once component is mounted
+    this.update = setInterval(() => {
+      this.setState({ time: new Date() });
+    }, 1 * 1000); // every 1 seconds
+  }
+
+  componentWillUnmount() {
+    // delete the interval just before component is removed
+    clearInterval(this.update);
+  }
+
+  render() {
+    const { time } = this.state; // retrieve the time from state
+
+    return (
+      <div>
+        <h1>
+          {/* print the string prettily */}
+          {time.toLocaleTimeString()}
+        </h1>
+      </div>
+    );
+  }
 }

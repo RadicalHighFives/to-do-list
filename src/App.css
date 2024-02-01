@@ -19,7 +19,7 @@ body {
 }
 
 h1 {
-  text-align: center;
+  text-align: left;
   color: #777777;
   margin-bottom: 0.5rem;
   font-size: 1.75rem;
@@ -49,7 +49,7 @@ h1 {
   color: #777777;
 }
 .todo-input::placeholder {
-  color: #ffffff4d;
+  color: #007bff;
 }
 
 .todo-btn {
@@ -85,7 +85,7 @@ h1 {
 }
 
 .completed {
-  color: #c5aeff;
+  color: #777777;
   text-decoration: line-through;
   cursor: pointer;
 }
