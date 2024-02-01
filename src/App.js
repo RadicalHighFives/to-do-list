@@ -26,7 +26,7 @@ export default function App() {
 
   const handleDeleteTodo = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id));
-    setTrack(false);
+    //setTrack(false);
   };
 
   const handleEditTodo = (id) => {
